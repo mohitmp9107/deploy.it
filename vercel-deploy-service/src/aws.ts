@@ -23,7 +23,6 @@ export const downloadS3Folder = async (prefix:string)=>{
                 return;
             }
             const finalOutputPath = path.join(__dirname.slice(0,-3), Key);
-            // console.log("Downloading:", Key, "to", finalOutputPath);
 
             const outputFile = fs.createWriteStream(finalOutputPath);
             const dirName = path.dirname(finalOutputPath);
@@ -48,10 +47,8 @@ export function copyFinalDist(id: string) {
     const folderPath = path.join(__dirname.slice(0,-3), `output/${id}/build`);
     const allFiles = getAllFiles(folderPath);
     // console.log(folderPath);
-    const unixFolderPath = upath.toUnix(folderPath);
-    console.log(unixFolderPath);
     allFiles.forEach(file => {
-        uploadFile(`dist/${id}`+file.slice(unixFolderPath.length+1), file);
+        uploadFile(`dist/${id}`+file.slice(folderPath.length+1), file);
     })
 }
 
@@ -64,7 +61,9 @@ const getAllFiles = (folderPath: string) => {
         if (fs.statSync(fullFilePath).isDirectory()) {
             response = response.concat(getAllFiles(fullFilePath))
         } else {
-            response.push(fullFilePath);
+            const unixFullFilePath = upath.toUnix(fullFilePath);
+            console.log(unixFullFilePath);
+            response.push(unixFullFilePath);
         }
     });
     return response;
