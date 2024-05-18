@@ -20,6 +20,8 @@ app.use(express.json());
 const publisher = createClient();
 publisher.connect();
 
+const subscriber = createClient();
+subscriber.connect();
 
 const __dirname = path.resolve();
 
@@ -50,8 +52,21 @@ app.post("/deploy", async(req,res)=>{
     
     // putting id on redis queue
     publisher.lPush("build-queue",id);
+
+    // shouldn't use like in this on scale
+    //using redis cache as DB
+    publisher.hSet("status",id,"uploaded"); //hGet()
+
     res.json({
         id:id
+    });
+})
+
+app.get("/status",async(req,res)=>{
+    const id = req.query.id;
+    const response = await subscriber.hGet("status",id as string);
+    res.send({
+        status:response
     });
 })
 

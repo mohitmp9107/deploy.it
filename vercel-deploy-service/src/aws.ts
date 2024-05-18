@@ -48,7 +48,7 @@ export function copyFinalDist(id: string) {
     const allFiles = getAllFiles(folderPath);
     // console.log(folderPath);
     allFiles.forEach(file => {
-        uploadFile(`dist/${id}`+file.slice(folderPath.length+1), file);
+        uploadFile(`dist/${id}/`+file.slice(folderPath.length+1), file);
     })
 }
 

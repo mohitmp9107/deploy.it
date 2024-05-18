@@ -6,6 +6,9 @@ import { isObjectBindingPattern } from "typescript";
 const subscriber = createClient();
 subscriber.connect();
 
+const publisher = createClient();
+publisher.connect();
+
 async function main(){
     // infinite running loop pulling id from redis queue
     console.log('starting infinite loop');
@@ -21,6 +24,7 @@ async function main(){
         await downloadS3Folder(`output/${id}`);
         await buildProject(id);
         await copyFinalDist(id);
+        publisher.hSet("status",id,"deployed");
     }
 }
 
