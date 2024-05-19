@@ -8,6 +8,8 @@
         <li><strong>vercel-deploy-service</strong>: A daemon service that continuously polls the Redis queue, builds the React code, and stores the compiled HTML, CSS, and JS files back on AWS S3 storage.</li>
         <li><strong>vercel-request-handler (Port 3001)</strong>: Retrieves the compiled HTML, CSS, and JS from S3 and serves it to the browser.</li>
     </ul>
+     <h2>System Design</h2>
+    <img src="https://github.com/mohitmp9107/deploy.it/blob/main/system-design.png" alt="system design"> 
     <h2>Services Overview</h2>
     <h3>1. vercel-upload-service (Port 3000)</h3>
     <ul>
