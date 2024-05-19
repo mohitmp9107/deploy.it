@@ -17,15 +17,12 @@ console.log('starting server on 3001');
 
 app.get("/*",async(req,res)=>{
     // id.google.com
-    console.log('innside');
     const host = req.hostname;
     const id = host.split(".")[0];
     const filePath = req.path;
     console.log(id);
     console.log(filePath);
     
-    const key = `dist/${id}${filePath}`;
-    console.log(key);
     const contents = await s3.getObject({
         Bucket:"vercel-mohit",
         Key:`dist/${id}${filePath}`,

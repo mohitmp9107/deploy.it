@@ -10,8 +10,7 @@ export const getAllFiles = (folderPath: string)=>{
 
     fileAndFolders.forEach(file =>{
         const fullAbsolutePath = path.join(folderPath,file);
-        // console.log(folderPath);
-        // console.log(file);
+
         if(fs.statSync(fullAbsolutePath).isDirectory()){
             response = response.concat(getAllFiles(fullAbsolutePath));
         }else{

@@ -18,5 +18,4 @@ export const uploadFile = async (fileName:string , localFilePath:string)=>{
         Bucket:"vercel-mohit",
         Key:fileName,
     }).promise();
-    console.log(response);
 }

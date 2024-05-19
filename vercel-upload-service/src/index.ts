@@ -11,10 +11,6 @@ import { uploadFile } from "./aws";
 const app = express();
 
 app.use(cors());
-// app.use(bodyParser.urlencoded({
-//     extended: true
-// }));
-// app.use(bodyParser.json());
 app.use(express.json());
 
 const publisher = createClient();
@@ -34,9 +30,9 @@ app.get("/", (req,res)=>{
 
 app.post("/deploy", async(req,res)=>{
     const repoUrl = req.body.repoUrl;
-    // console.log(req);
     console.log(repoUrl);
-    let id = generate();
+
+    const id = generate();
     await simpleGit().clone(repoUrl,path.join(__dirname,`output/${id}`));
 
     const files = getAllFiles(path.join(__dirname,`output/${id}`));
@@ -46,32 +42,14 @@ app.post("/deploy", async(req,res)=>{
     // TODO : this function should be promisified
     files.forEach(async file=>{
         const unixFilePath = upath.toUnix(file);
-        console.log(unixFilePath);
         await uploadFile(unixFilePath.slice(__dirname.length+1),unixFilePath);
     })
 
     //TODO: remove when above function is promisified
     await new Promise((resolve) => setTimeout(resolve, 5000))
-
-    // async function processFiles(files: string[]) {
-    //     for (const file of files) {
-    //         const unixFilePath = upath.toUnix(file);
-    //         console.log(unixFilePath);
-    //         await uploadFile(unixFilePath.slice(__dirname.length + 1), unixFilePath);
-    //     }
-    // }
-
-    // processFiles(files)
-    // .then(() => {
-    //     console.log('All files have been processed.');
-    // })
-    // .catch(error => {
-    //     console.error('An error occurred while processing files:', error);
-    // });
     
     // putting id on redis queue
     publisher.lPush("build-queue",id);
-    console.log(id);
     // shouldn't use like in this on scale
     //using redis cache as DB
     publisher.hSet("status",id,"uploaded"); //hGet()

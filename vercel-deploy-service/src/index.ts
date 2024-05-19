@@ -21,7 +21,6 @@ async function main(){
         // console.log(response);
         // @ts-ignore;
         const id = response.element;
-        console.log(id);
 
         await downloadS3Folder(`output/${id}`);
         await buildProject(id);

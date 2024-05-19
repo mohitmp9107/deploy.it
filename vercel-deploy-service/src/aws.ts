@@ -18,7 +18,7 @@ export const downloadS3Folder = async (prefix:string)=>{
 
     const allPromises = allFiles.Contents?.map(async ({Key}) => {
         return new Promise(async (resolve) => {
-            console.log(Key);
+            // console.log(Key);
             if (!Key) {
                 resolve("");
                 return;
@@ -27,7 +27,7 @@ export const downloadS3Folder = async (prefix:string)=>{
 
             const outputFile = fs.createWriteStream(finalOutputPath);
             const dirName = path.dirname(finalOutputPath);
-            console.log(dirName);
+            // console.log(dirName);
             if (!fs.existsSync(dirName)){
                 fs.mkdirSync(dirName, { recursive: true });
             }
@@ -47,7 +47,6 @@ export const downloadS3Folder = async (prefix:string)=>{
 export function copyFinalDist(id: string) {
     const folderPath = path.join(__dirname.slice(0,-3), `output/${id}/build`);
     const allFiles = getAllFiles(folderPath);
-    // console.log(folderPath);
     allFiles.forEach(file => {
         uploadFile(`dist/${id}/`+file.slice(folderPath.length+1), file);
     })
@@ -63,7 +62,7 @@ const getAllFiles = (folderPath: string) => {
             response = response.concat(getAllFiles(fullFilePath))
         } else {
             const unixFullFilePath = upath.toUnix(fullFilePath);
-            console.log(unixFullFilePath);
+            // console.log(unixFullFilePath);
             response.push(unixFullFilePath);
         }
     });
