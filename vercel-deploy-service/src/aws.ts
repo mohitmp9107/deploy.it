@@ -10,6 +10,7 @@ const s3 = new AWS.S3({
 })
 
 export const downloadS3Folder = async (prefix:string)=>{
+    console.log('downloading....');
     const allFiles = await s3.listObjectsV2({
         Bucket: "vercel-mohit",
         Prefix: prefix
@@ -17,7 +18,7 @@ export const downloadS3Folder = async (prefix:string)=>{
 
     const allPromises = allFiles.Contents?.map(async ({Key}) => {
         return new Promise(async (resolve) => {
-            // console.log(Key);
+            console.log(Key);
             if (!Key) {
                 resolve("");
                 return;
@@ -26,7 +27,7 @@ export const downloadS3Folder = async (prefix:string)=>{
 
             const outputFile = fs.createWriteStream(finalOutputPath);
             const dirName = path.dirname(finalOutputPath);
-            // console.log(dirName);
+            console.log(dirName);
             if (!fs.existsSync(dirName)){
                 fs.mkdirSync(dirName, { recursive: true });
             }
